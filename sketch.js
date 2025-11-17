@@ -426,8 +426,8 @@ function drawPlats() {
 // Check for platform collisions
 function checkPlatCollision() {
   let playerBottom = charPos.dy + 300;
-  let playerLeft = charPos.dx;
-  let playerRight = charPos.dx + 50;
+  let playerLeft = charPos.dx + 100;
+  let playerRight = charPos.dx + 100;
 
   let onPlatform = false;
 
