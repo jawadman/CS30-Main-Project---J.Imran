@@ -2,10 +2,12 @@
 
 ## Description
 
+- An action game, with roguelike elements
 
 ## Need to have
  
  - An enemy spawn system
+ - Have different levels when progressing game
  - A Side-scrolling map for every level
  - Have bosses at the end for every level
  - Working platforms
@@ -19,3 +21,4 @@
 - A difficulty selector
 - Puzzles
 - Have cutscenes
+- Have differing endings
