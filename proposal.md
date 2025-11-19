@@ -12,6 +12,7 @@
  - Have bosses at the end for every level
  - Working platforms
  - Have a coherent story
+ - Have different boss Ais depending on bosses.
 
  
 ## Nice to have
