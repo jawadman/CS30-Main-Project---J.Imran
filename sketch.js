@@ -20,7 +20,7 @@ let platformW = 200;
 let platformH = 20;
 let platformImg;
 
-let cellSize = 40;
+let cellSize = 50;
 let showGrid = false;
 
 // 2D Array for grid alignment
@@ -166,7 +166,17 @@ function preload() {
     bossFrames.runbackFrames.push(loadImage(`assets/bossAnims/run_back_${i}.png`));
   }
 
-  bg = loadImage("assets/Desert_bg.jpg");
+  bg1 = loadImage("assets/Desert_bg.jpg");
+  bg2 = loadImage("assets/Desert_bg.jpg");
+  bg3 = loadImage("assets/Desert_bg.jpg");
+  bg4 = loadImage("assets/Desert_bg.jpg");
+  bg5 = loadImage("assets/Desert_bg.jpg");
+  bg6 = loadImage("assets/Desert_bg.jpg");
+  bg7 = loadImage("assets/Desert_bg.jpg");
+  bg8 = loadImage("assets/Desert_bg.jpg");
+  bg9 = loadImage("assets/Desert_bg.jpg");
+  bg10 = loadImage("assets/Desert_bg.jpg");
+  bg11 = loadImage("assets/Desert_bg.jpg");
   platformImg = loadImage("assets/platform.png");
 }
 
