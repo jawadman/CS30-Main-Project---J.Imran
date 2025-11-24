@@ -41,12 +41,20 @@ playerFrames = {
   jumpDownFrames : []
 };
 
+playerSizeX = 175;
+playerSizeY = 250;
+
+
 bossFrames = {
   idleFrames : [],
   attack1Frames : [],
   runFrames : [],
   runbackFrames : []
 };
+
+bossSizeX = 450;
+bossSizeY = 350;
+
 
 // Total frames for each animation
 let totalRunFrames = 8;
@@ -177,12 +185,13 @@ function preload() {
   bg9 = loadImage("assets/Free Pixel Art Forest/PNG/Background layers/Layer_9.png");
   bg10 = loadImage("assets/Free Pixel Art Forest/PNG/Background layers/Layer_10.png");
   bg11 = loadImage("assets/Free Pixel Art Forest/PNG/Background layers/Layer_11.png");
+  bg12 = loadImage("assets/Free Pixel Art Forest/PNG/Background layers/Layer_12.png");
   platformImg = loadImage("assets/platform.png");
 }
 
 function setup() {
   createCanvas(1200, 700);
-  initialY = height / 2 - 110;
+  initialY = height / 2 - 60;
   
   // Set positions aligned to grid
   charPos.dx = 3 * cellSize; // Grid position (3,0)
@@ -248,17 +257,18 @@ function draw() {
     }
 
     // Background and Platforms
-    image(bg11, 0, 0, width, height);
-    image(bg10, 0, 0, width, height);
-    image(bg3, 0, 300, width, height);
-    image(bg4, 0, 0, width, height);
-    // image(bg5, 0, 0, width, height);
-    // image(bg6, 0, 0, width, height);
-    // image(bg1, 0, 0, width, height);
-    // image(bg8, 0, 0, width, height);
-    // image(bg9, 0, 0, width, height);
-    // image(bg10, 0, 0, width, height);
-    // image(bg1, 0, 0, width, height);
+    image(bg12, 0, -100, width, height);
+    image(bg11, 0, -100, width, height);
+    image(bg10, 0, -100, width, height);
+    image(bg9, 0, -100, width, height);
+    image(bg8, 0, -100, width, height);
+    image(bg7, 0, -100, width, height);
+    image(bg6, 0, -100, width, height);
+    image(bg5, 0, -100, width, height);
+    image(bg4, 0, -100, width, height);
+    image(bg3, 0, -100, width, height);
+    image(bg2, 0, -100, width, height);
+    image(bg1, 0, -100, width, height);
     drawPlats();
     
     timerPassed = int((millis()-timer) / 1000);
@@ -334,10 +344,10 @@ function draw() {
 
     // Draws the current frame
     if (Frames.player.length > 0) {
-      image(Frames.player[frameIndex.player], charPos.dx, charPos.dy, 200, 300);
+      image(Frames.player[frameIndex.player], charPos.dx, charPos.dy, playerSizeX, playerSizeY);
     }
     if (Frames.boss.length > 0) {
-      image(Frames.boss[frameIndex.boss], bossPos.dx, bossPos.dy, 500 , 400);
+      image(Frames.boss[frameIndex.boss], bossPos.dx, bossPos.dy, bossSizeX , bossSizeY);
     }
 
     // Update the frame index based on animation delay
@@ -445,7 +455,7 @@ function drawPlats() {
 
 // Check for platform collisions
 function checkPlatCollision() {
-  let playerBottom = charPos.dy + 300;
+  let playerBottom = charPos.dy + playerSizeY;
   let playerLeft = charPos.dx + 100;
   let playerRight = charPos.dx + 100;
 
@@ -466,7 +476,7 @@ function checkPlatCollision() {
         playerRight > plat.x && 
         playerLeft < plat.x + plat.width) {
 
-      charPos.dy = plat.y - 300;
+      charPos.dy = plat.y - playerSizeY;
       isJumping = false;
       yVelocity = 0;
       currentAnim.player = "idle";
