@@ -13,6 +13,7 @@
  - Working platforms
  - Have a coherent story
  - Have different boss Ais depending on bosses.
+ - Add background music & sound-effect
 
  
 ## Nice to have

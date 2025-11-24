@@ -166,17 +166,17 @@ function preload() {
     bossFrames.runbackFrames.push(loadImage(`assets/bossAnims/run_back_${i}.png`));
   }
 
-  bg1 = loadImage("assets/Desert_bg.jpg");
-  bg2 = loadImage("assets/Desert_bg.jpg");
-  bg3 = loadImage("assets/Desert_bg.jpg");
-  bg4 = loadImage("assets/Desert_bg.jpg");
-  bg5 = loadImage("assets/Desert_bg.jpg");
-  bg6 = loadImage("assets/Desert_bg.jpg");
-  bg7 = loadImage("assets/Desert_bg.jpg");
-  bg8 = loadImage("assets/Desert_bg.jpg");
-  bg9 = loadImage("assets/Desert_bg.jpg");
-  bg10 = loadImage("assets/Desert_bg.jpg");
-  bg11 = loadImage("assets/Desert_bg.jpg");
+  bg1 = loadImage("assets/Free Pixel Art Forest/PNG/Background layers/Layer_1.png");
+  bg2 = loadImage("assets/Free Pixel Art Forest/PNG/Background layers/Layer_2.png");
+  bg3 = loadImage("assets/Free Pixel Art Forest/PNG/Background layers/Layer_3.png");
+  bg4 = loadImage("assets/Free Pixel Art Forest/PNG/Background layers/Layer_4.png");
+  bg5 = loadImage("assets/Free Pixel Art Forest/PNG/Background layers/Layer_5.png");
+  bg6 = loadImage("assets/Free Pixel Art Forest/PNG/Background layers/Layer_6.png");
+  bg7 = loadImage("assets/Free Pixel Art Forest/PNG/Background layers/Layer_7.png");
+  bg8 = loadImage("assets/Free Pixel Art Forest/PNG/Background layers/Layer_8.png");
+  bg9 = loadImage("assets/Free Pixel Art Forest/PNG/Background layers/Layer_9.png");
+  bg10 = loadImage("assets/Free Pixel Art Forest/PNG/Background layers/Layer_10.png");
+  bg11 = loadImage("assets/Free Pixel Art Forest/PNG/Background layers/Layer_11.png");
   platformImg = loadImage("assets/platform.png");
 }
 
@@ -248,7 +248,17 @@ function draw() {
     }
 
     // Background and Platforms
-    image(bg, 0, 0, width, height);
+    image(bg11, 0, 0, width, height);
+    image(bg10, 0, 0, width, height);
+    image(bg3, 0, 300, width, height);
+    image(bg4, 0, 0, width, height);
+    // image(bg5, 0, 0, width, height);
+    // image(bg6, 0, 0, width, height);
+    // image(bg1, 0, 0, width, height);
+    // image(bg8, 0, 0, width, height);
+    // image(bg9, 0, 0, width, height);
+    // image(bg10, 0, 0, width, height);
+    // image(bg1, 0, 0, width, height);
     drawPlats();
     
     timerPassed = int((millis()-timer) / 1000);
