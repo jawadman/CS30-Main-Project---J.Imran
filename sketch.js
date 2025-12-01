@@ -23,6 +23,7 @@ let platformImg;
 let cellSize = 50;
 let showGrid = false;
 
+
 // 2D Array for grid alignment
 let worldGrid = [];
 const GRID_COLS = 20;
@@ -83,13 +84,16 @@ let currentAnim ={
 // Object Positions
 charPos = {
   dx: 0,
-  dy: 20,
+  dy: 0,
 };
 bossPos = {
   dx: 0,
   dy: 0
 };
 let initialY;
+
+let bx = 0;
+let by = -100;
 
 // Jumping variables
 let isJumping = false;
@@ -190,7 +194,7 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(1200, 700);
+  createCanvas(windowWidth, windowHeight);
   initialY = height / 2 - 60;
   
   // Set positions aligned to grid
@@ -257,18 +261,18 @@ function draw() {
     }
 
     // Background and Platforms
-    image(bg12, 0, -100, width, height);
-    image(bg11, 0, -100, width, height);
-    image(bg10, 0, -100, width, height);
-    image(bg9, 0, -100, width, height);
-    image(bg8, 0, -100, width, height);
-    image(bg7, 0, -100, width, height);
-    image(bg6, 0, -100, width, height);
-    image(bg5, 0, -100, width, height);
-    image(bg4, 0, -100, width, height);
-    image(bg3, 0, -100, width, height);
-    image(bg2, 0, -100, width, height);
-    image(bg1, 0, -100, width, height);
+    image(bg12, bx, by, width, height);
+    image(bg11, bx, by, width, height);
+    image(bg10, bx, by, width, height);
+    image(bg9, bx, by, width, height);
+    image(bg8, bx, by, width, height);
+    image(bg7, bx, by, width, height);
+    image(bg6, bx, by, width, height);
+    image(bg5, bx, by, width, height);
+    image(bg4, bx, by, width, height);
+    image(bg3, bx, by, width, height);
+    image(bg2, bx, by, width, height);
+    image(bg1, bx, by, width, height);
     drawPlats();
     
     timerPassed = int((millis()-timer) / 1000);
@@ -278,14 +282,14 @@ function draw() {
 
     // Player Health Bar
     fill("green");
-    rect(50, 50, (playerHealth / maxHealth) * 200, 20);
+    rect(50, 50, playerHealth / maxHealth * 200, 20);
     stroke(0);
     noFill();
     rect(50, 50, 200, 20);
 
     // Boss Health Bar
     fill("green");
-    rect(950, 50, (bossHealth / maxHealth) * 200, 20);
+    rect(950, 50, bossHealth / maxHealth * 200, 20);
     stroke(0);
     noFill();
     rect(950, 50, 200, 20);
@@ -537,7 +541,8 @@ function mouseClicked() {
   // Determine attack direction
   if (mouseX < charPos.dx + 100) { 
     setAnimation("player", "attackback");
-  } else {
+  } 
+  else {
     setAnimation("player", "attack");
   }
 
@@ -594,7 +599,8 @@ function movement() {
       if (yVelocity < 0) {
         currentAnim.player = "jumpUp";
         frameIndex.player = 0;
-      } else {
+      } 
+      else {
         currentAnim.player = "jumpDown";
         frameIndex.player = 0;
       }
