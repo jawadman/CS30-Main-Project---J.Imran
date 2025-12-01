@@ -83,7 +83,7 @@ let currentAnim ={
 // Object Positions
 charPos = {
   dx: 0,
-  dy: 0,
+  dy: 20,
 };
 bossPos = {
   dx: 0,
