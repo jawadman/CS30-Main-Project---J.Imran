@@ -20,9 +20,8 @@ let platformW = 200;
 let platformH = 20;
 let platformImg;
 
-let cellSize = 50;
+let cellSize = 100;
 let showGrid = false;
-
 
 // 2D Array for grid alignment
 let worldGrid = [];
@@ -195,14 +194,13 @@ function preload() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  initialY = height / 2 - 60;
+  initialY = height / 2 + 60;
   
-  // Set positions aligned to grid
   charPos.dx = 3 * cellSize; // Grid position (3,0)
   charPos.dy = initialY;
   
   bossPos.dx = 15 * cellSize; // Grid position (15,0)
-  bossPos.dy = initialY + 30;
+  bossPos.dy = initialY + 10;
   
   generatePlats();
 }
@@ -419,7 +417,7 @@ function generatePlats() {
 
   // Create platforms at specific grid positions
   let platformPositions = [
-    {x: 14, y: 10}, {x: 5, y: 5}, {x: 19, y: 7}
+    {x: 14, y: 10}, {x: 5, y: 7}, {x: 19, y: 7}
   ];
 
   for (let pos of platformPositions) {
