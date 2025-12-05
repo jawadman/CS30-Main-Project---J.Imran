@@ -74,6 +74,7 @@ let delayCounter = 0;
 let frameDelay = 7;
 let bg;
 
+
 // Base animation state
 let currentAnim ={
   player: "idle",
@@ -271,6 +272,8 @@ function draw() {
     image(bg3, bx, by, width, height);
     image(bg2, bx, by, width, height);
     image(bg1, bx, by, width, height);
+
+   
     drawPlats();
     
     timerPassed = int((millis()-timer) / 1000);
@@ -556,24 +559,37 @@ function mouseClicked() {
 
 // Moevement functions 
 function movement() {
-  const moveSpeed = 5;
+  const moveSpeed = 4;
   
   
   if (keyIsDown(68)) {
-    setAnimation("player", "run");
-    
-    if (charPos.dx < width - 250) {
-      charPos.dx += moveSpeed;
+    setAnimation("player", "run");  
+    bx -= moveSpeed;
+    if(bx > width){
+      for(let i = 0; i < 10; i++){
+        image(bg12, bx + width - moveSpeed, by, width, height);
+        image(bg11, bx + width - moveSpeed, by, width, height);
+        image(bg10, bx + width - moveSpeed, by, width, height);
+        image(bg9, bx + width - moveSpeed, by, width, height);
+        image(bg8, bx + width - moveSpeed, by, width, height);
+        image(bg7, bx + width - moveSpeed, by, width, height);
+        image(bg6, bx + width - moveSpeed, by, width, height);
+        image(bg5, bx + width - moveSpeed, by, width, height);
+        image(bg4, bx + width - moveSpeed, by, width, height);
+        image(bg3, bx + width - moveSpeed, by, width, height);
+        image(bg2, bx + width - moveSpeed, by, width, height);
+        image(bg1, bx + width - moveSpeed, by, width, height);
+      }
     }
   }
 
   else if (keyIsDown(65)) {
-    setAnimation("player", "runback");
+    if(bx <= 100)
+      setAnimation("player", "runback")
+      bx += moveSpeed;
+}
     
-    if (charPos.dx > 0) {
-      charPos.dx -= moveSpeed;
-    }
-  }
+
   else {
     if (currentAnim.player === "run" || currentAnim.player === "runback") {
       currentAnim.player = "idle";
@@ -647,7 +663,7 @@ function updateBossAttack() {
   let distanceY = Math.abs(charPos.dy - bossPos.dy);
 
   if (distanceX <= 20 && distanceY <= 100 && millis() - lastBossAttack > bossAttackCooldown) {
-    playerHealth -= 10;
+    playerHealth -= 0;
     if (playerHealth < 0){
       playerHealth = 0;
     }
