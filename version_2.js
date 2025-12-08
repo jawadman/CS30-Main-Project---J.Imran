@@ -28,6 +28,9 @@ let worldGrid = [];
 const GRID_COLS = 20;
 const GRID_ROWS = 15;
 
+
+let endBG = false;
+
 // Arrays to hold animation frames
 playerFrames = {
   idleFrames : [],
@@ -272,6 +275,19 @@ function draw() {
     image(bg3, bx, by, width, height);
     image(bg2, bx, by, width, height);
     image(bg1, bx, by, width, height);
+
+    image(bg12, bx + width , by, width, height);
+    image(bg11, bx + width , by, width, height);
+    image(bg10, bx + width , by, width, height);
+    image(bg9, bx + width , by, width, height);
+    image(bg8, bx + width , by, width, height);
+    image(bg7, bx + width , by, width, height);
+    image(bg6, bx + width , by, width, height);
+    image(bg5, bx + width , by, width, height);
+    image(bg4, bx + width , by, width, height);
+    image(bg3, bx + width , by, width, height);
+    image(bg2, bx + width , by, width, height);
+    image(bg1, bx + width , by, width, height);
 
    
     drawPlats();
@@ -565,29 +581,17 @@ function movement() {
   if (keyIsDown(68)) {
     setAnimation("player", "run");  
     bx -= moveSpeed;
-    if(bx > width){
-      for(let i = 0; i < 10; i++){
-        image(bg12, bx + width - moveSpeed, by, width, height);
-        image(bg11, bx + width - moveSpeed, by, width, height);
-        image(bg10, bx + width - moveSpeed, by, width, height);
-        image(bg9, bx + width - moveSpeed, by, width, height);
-        image(bg8, bx + width - moveSpeed, by, width, height);
-        image(bg7, bx + width - moveSpeed, by, width, height);
-        image(bg6, bx + width - moveSpeed, by, width, height);
-        image(bg5, bx + width - moveSpeed, by, width, height);
-        image(bg4, bx + width - moveSpeed, by, width, height);
-        image(bg3, bx + width - moveSpeed, by, width, height);
-        image(bg2, bx + width - moveSpeed, by, width, height);
-        image(bg1, bx + width - moveSpeed, by, width, height);
-      }
+    if(bx < 0 - width){
+      bx = 0
     }
   }
 
   else if (keyIsDown(65)) {
-    if(bx <= 100)
-      setAnimation("player", "runback")
+    if(bx <= 0){
+      setAnimation("player", "runback");
       bx += moveSpeed;
-}
+    }
+  }
     
 
   else {
