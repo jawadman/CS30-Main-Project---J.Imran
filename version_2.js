@@ -582,7 +582,7 @@ function movement() {
     setAnimation("player", "run");  
     bx -= moveSpeed;
     if(bx < 0 - width){
-      bx = 0
+      bx = 0;
     }
   }
 
