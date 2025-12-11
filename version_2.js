@@ -587,7 +587,7 @@ function movement() {
   }
 
   else if (keyIsDown(65)) {
-    if(bx <= 0){
+    if(bx <= -100){
       setAnimation("player", "runback");
       bx += moveSpeed;
     }
