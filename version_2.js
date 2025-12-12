@@ -575,7 +575,7 @@ function mouseClicked() {
 
 // Moevement functions 
 function movement() {
-  const moveSpeed = 4;
+  const moveSpeed = 5;
   
   
   if (keyIsDown(68)) {
@@ -587,7 +587,7 @@ function movement() {
   }
 
   else if (keyIsDown(65)) {
-    if(bx <= -100){
+    if(bx <= 0){
       setAnimation("player", "runback");
       bx += moveSpeed;
     }
