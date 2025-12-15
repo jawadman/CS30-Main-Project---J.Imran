@@ -86,7 +86,7 @@ let currentAnim ={
 
 // Object Positions
 charPos = {
-  dx: 0,
+  dx: 500,
   dy: 0,
 };
 bossPos = {
@@ -200,7 +200,7 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   initialY = height / 2 + 60;
   
-  charPos.dx = width/2; // Grid position (3,0)
+  charPos.dx = width/2 - 200; // Grid position (3,0)
   charPos.dy = initialY;
   
   bossPos.dx = 15 * cellSize; // Grid position (15,0)
