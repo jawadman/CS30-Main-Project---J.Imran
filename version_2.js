@@ -30,6 +30,7 @@ const GRID_ROWS = 15;
 
 
 let endBG = false;
+let mapCount = 0;
 
 // Arrays to hold animation frames
 playerFrames = {
@@ -288,8 +289,10 @@ function draw() {
     image(bg3, bx + width , by, width, height);
     image(bg2, bx + width , by, width, height);
     image(bg1, bx + width , by, width, height);
+    
+    mapCount += 1;
+    console.log(mapCount)
 
-   
     drawPlats();
     
     timerPassed = int((millis()-timer) / 1000);
@@ -472,6 +475,9 @@ function drawPlats() {
   for (let plat of platforms) {
     image(platformImg, plat.x, plat.y, plat.width, plat.height);
   }
+  if(bx < 0 - width){
+    plat.x += moveSpeed
+  }
 }
 
 // Check for platform collisions
@@ -581,7 +587,7 @@ function movement() {
   if (keyIsDown(68)) {
     setAnimation("player", "run");  
     bx -= moveSpeed;
-    if(bx < 0 - width){
+    if(bx < 0 - width && mapCount <5){
       bx = 0;
     }
   }
