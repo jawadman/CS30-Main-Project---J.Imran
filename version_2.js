@@ -291,7 +291,7 @@ function draw() {
     image(bg1, bx + width , by, width, height);
     
     mapCount += 1;
-    console.log(mapCount)
+    console.log(mapCount);
 
     drawPlats();
     
@@ -474,9 +474,10 @@ function drawGrid() {
 function drawPlats() {
   for (let plat of platforms) {
     image(platformImg, plat.x, plat.y, plat.width, plat.height);
+    console.log(plat.x);
   }
   if(bx < 0 - width){
-    plat.x += moveSpeed
+    plat.x += moveSpeed;
   }
 }
 
