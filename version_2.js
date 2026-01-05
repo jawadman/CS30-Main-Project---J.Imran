@@ -290,7 +290,6 @@ function draw() {
     image(bg2, bx + width , by, width, height);
     image(bg1, bx + width , by, width, height);
     
-    mapCount += 1;
     console.log(mapCount);
 
     drawPlats();
@@ -473,7 +472,7 @@ function drawGrid() {
 // Draws platform asset based on 2D array
 function drawPlats() {
   for (let plat of platforms) {
-    image(platformImg, plat.x, plat.y, plat.width, plat.height);
+    image(platformImg, plat.x + bx, plat.y, plat.width, plat.height);
     console.log(plat.x);
   }
   if(bx < 0 - width){
@@ -484,16 +483,20 @@ function drawPlats() {
 // Check for platform collisions
 function checkPlatCollision() {
   let playerBottom = charPos.dy + playerSizeY;
-  let playerLeft = charPos.dx + 100;
-  let playerRight = charPos.dx + 100;
+  // Define player hitbox sides clearly
+  let playerLeft = charPos.dx + 50; // Adjusted for better hitbox
+  let playerRight = charPos.dx + 120; // Adjusted for better hitbox
 
   let onPlatform = false;
 
   for (let plat of platforms) {
+    // Calculate the platform's current position on screen
+    let platScreenX = plat.x + bx;
+
     // Check if player is currently standing on this platform
     if (playerBottom === plat.y && 
-        playerRight > plat.x && 
-        playerLeft < plat.x + plat.width) {
+        playerRight > platScreenX && 
+        playerLeft < platScreenX + plat.width) {
       onPlatform = true;
       break;
     }
@@ -501,8 +504,8 @@ function checkPlatCollision() {
     // Check if player is landing on this platform from above
     if (playerBottom <= plat.y && 
         playerBottom + yVelocity >= plat.y &&
-        playerRight > plat.x && 
-        playerLeft < plat.x + plat.width) {
+        playerRight > platScreenX && 
+        playerLeft < platScreenX + plat.width) {
 
       charPos.dy = plat.y - playerSizeY;
       isJumping = false;
@@ -582,25 +585,24 @@ function mouseClicked() {
 
 // Moevement functions 
 function movement() {
-  const moveSpeed = 5;
-  
-  
-  if (keyIsDown(68)) {
+  let moveSpeed = 5; // Define moveSpeed here or as a global
+
+  if (keyIsDown(68)) { // Moving Right
     setAnimation("player", "run");  
-    bx -= moveSpeed;
-    if(bx < 0 - width && mapCount <5){
+    bx -= moveSpeed; // Just move the background offset
+    
+    // Boundary check
+    if(bx < 0 - width ){
       bx = 0;
     }
   }
 
-  else if (keyIsDown(65)) {
+  else if (keyIsDown(65)) { // Moving Left
     if(bx <= 0){
       setAnimation("player", "runback");
-      bx += moveSpeed;
+      bx += moveSpeed; // Just move the background offset
     }
   }
-    
-
   else {
     if (currentAnim.player === "run" || currentAnim.player === "runback") {
       currentAnim.player = "idle";
