@@ -308,10 +308,10 @@ function draw() {
 
     // Boss Health Bar
     fill("green");
-    rect(950, 50, bossHealth / maxHealth * 200, 20);
+    rect(bossPos.dx + 200, bossPos.dy + 120, bossHealth / maxHealth * 70, 7);
     stroke(0);
     noFill();
-    rect(950, 50, 200, 20);
+    rect(bossPos.dx + 200, bossPos.dy + 120, 70, 7);
 
     movement();
     updateBossAttack();
