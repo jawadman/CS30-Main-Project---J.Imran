@@ -548,7 +548,7 @@ function mouseClicked() {
   let distanceX = Math.abs(charPos.dx - bossPos.dx);
   if (distanceX <= 20) {
     bossHealth -= 10;
-    if (bossHealth < 0){ 
+    if (bossHealth < 2){ 
       bossHealth = 0;
     }
   }
