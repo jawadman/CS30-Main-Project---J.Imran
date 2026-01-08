@@ -29,6 +29,11 @@ const GRID_COLS = 20;
 const GRID_ROWS = 15;
 
 // Arrays to hold animation frames
+enemy1Frames = {
+  idleFrames : [],
+  walkFrames : [],
+  attackFrames : [],
+}
 playerFrames = {
   idleFrames : [],
   rollFrames : [],
@@ -65,6 +70,9 @@ let totalAttackFrames = 18;
 let totalBlockFrames = 6;
 let totalJumpFrames = 3;
 
+let totalEnemy1RunFrames = 10;
+let totalEnemy1AttackFrames = 20
+
 // Animation control variables
 let frameIndex = {
   player: 0,
@@ -77,7 +85,8 @@ let bg;
 // Base animation state
 let currentAnim ={
   player: "idle",
-  boss: "idle",  
+  boss: "idle",
+  enemy1: "idle",  
 };
 
 // Object Positions
@@ -176,6 +185,19 @@ function preload() {
   for (let i = 1; i <= totalIdleFrames; i++) {
     bossFrames.runbackFrames.push(loadImage(`assets/bossAnims/run_back_${i}.png`));
   }
+
+  
+  for (let i = 1; i <= totalIdleFrames; i++) {
+    bossFrames.runbackFrames.push(loadImage(`assets\Enemy1Anims\Enemy1Idle\Enemy_1_Idle_(${i}).png`));
+  }
+  for (let i = 1; i <= totalEnemy1AttackFrames; i++) {
+    bossFrames.runbackFrames.push(loadImage(`assets\Enemy1Anims\Enemy1Idle\Enemy_1_Attack_(${i}).png`));
+  }
+  for (let i = 1; i <= totalEnemy1RunFrames; i++) {
+    bossFrames.runbackFrames.push(loadImage(`assets\Enemy1Anims\Enemy1Idle\Enemy_1_Move_(${i}).png`));
+  }
+
+
 
   bg1 = loadImage("assets/Free Pixel Art Forest/PNG/Background layers/Layer_1.png");
   bg2 = loadImage("assets/Free Pixel Art Forest/PNG/Background layers/Layer_2.png");
@@ -315,6 +337,18 @@ function draw() {
       Frames.boss = bossFrames.runbackFrames;
     }
 
+    // Frames for Enemy 1 animations
+
+    if (currentAnim.enemy1 === "idle") {
+      Frames.enemy1 = enemy1Frames.idleFrames;
+    }
+    else if (currentAnim.enemy1 === "attack") {
+      Frames.enemy1 = enemy1Frames.attackFrames;
+    }
+    else if (currentAnim.enemy1 === "walk") {
+      Frames.enemy1 = enemy1Frames.walkFrames;
+    }
+
     // Frames for player animations
     if (currentAnim.player === "idle") {
       Frames.player = playerFrames.idleFrames;
@@ -351,12 +385,16 @@ function draw() {
     if (Frames.boss.length > 0) {
       image(Frames.boss[frameIndex.boss], bossPos.dx, bossPos.dy, bossSizeX , bossSizeY);
     }
+    if (Frames.enemy1.length > 0) {
+      image(Frames.enemy1[frameIndex.enemy1], bossPos.dx, bossPos.dy, bossSizeX , bossSizeY);
+    }
 
     // Update the frame index based on animation delay
     delayCounter++;
     if (delayCounter >= frameDelay) {
       frameIndex.player = (frameIndex.player + 1) % Frames.player.length;
       frameIndex.boss = (frameIndex.boss + 1) % Frames.boss.length;
+      frameIndex.enemy1 = (frameIndex.enemy1 + 1) % Frames.enemy1.length;
       delayCounter = 0;
     }
 
@@ -368,6 +406,10 @@ function draw() {
     if (frameIndex.boss === Frames.boss.length-1 && currentAnim.boss !== "idle" && currentAnim.boss !== "run" && currentAnim.boss !== "runback") {
       currentAnim.boss = "idle";
       frameIndex.boss = 0;
+    }
+    if (frameIndex.boss === Frames.enemy1.length-1 && currentAnim.enemy1 !== "idle" && currentAnim.enemy1 !== "walk") {
+      currentAnim.enemy1 = "idle";
+      frameIndex.enemy1 = 0;
     }
   }
   
@@ -548,7 +590,7 @@ function mouseClicked() {
   let distanceX = Math.abs(charPos.dx - bossPos.dx);
   if (distanceX <= 20) {
     bossHealth -= 10;
-    if (bossHealth < 2){ 
+    if (bossHealth < 0){ 
       bossHealth = 0;
     }
   }
