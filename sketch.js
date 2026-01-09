@@ -33,7 +33,7 @@ enemy1Frames = {
   idleFrames : [],
   walkFrames : [],
   attackFrames : [],
-}
+};
 playerFrames = {
   idleFrames : [],
   rollFrames : [],
@@ -76,7 +76,8 @@ let totalEnemy1AttackFrames = 20
 // Animation control variables
 let frameIndex = {
   player: 0,
-  boss: 0
+  boss: 0,
+  enemy1: 0
 };
 let delayCounter = 0;
 let frameDelay = 7;
@@ -188,13 +189,13 @@ function preload() {
 
   
   for (let i = 1; i <= totalIdleFrames; i++) {
-    bossFrames.runbackFrames.push(loadImage(`assets\Enemy1Anims\Enemy1Idle\Enemy_1_Idle_(${i}).png`));
+    enemy1Frames.idleFrames.push(loadImage(`assets/Enemy1Anims/Enemy1Idle/Enemy_1_Idle_(${i}).png`));
   }
   for (let i = 1; i <= totalEnemy1AttackFrames; i++) {
-    bossFrames.runbackFrames.push(loadImage(`assets\Enemy1Anims\Enemy1Idle\Enemy_1_Attack_(${i}).png`));
+    enemy1Frames.attack1Frames.push(loadImage(`assets/Enemy1Anims/Enemy1Attack/Enemy_1_Attack_(${i}).png`));
   }
   for (let i = 1; i <= totalEnemy1RunFrames; i++) {
-    bossFrames.runbackFrames.push(loadImage(`assets\Enemy1Anims\Enemy1Idle\Enemy_1_Move_(${i}).png`));
+    enemy1Frames.walkFrames.push(loadImage(`assets/Enemy1Anims/Enemy1Move/Enemy_1_Move_(${i}).png`));
   }
 
 
@@ -320,7 +321,8 @@ function draw() {
     // Determine which frames to play depending on the current animation
     let Frames = {
       player: "idle",
-      boss: "idle"
+      boss: "idle",
+      enemy1: "idle"
     };
 
     // Frames for boss animations
@@ -386,7 +388,7 @@ function draw() {
       image(Frames.boss[frameIndex.boss], bossPos.dx, bossPos.dy, bossSizeX , bossSizeY);
     }
     if (Frames.enemy1.length > 0) {
-      image(Frames.enemy1[frameIndex.enemy1], bossPos.dx, bossPos.dy, bossSizeX , bossSizeY);
+      image(Frames.enemy1[frameIndex.enemy1], bossPos.dx-50, bossPos.dy, bossSizeX , bossSizeY);
     }
 
     // Update the frame index based on animation delay
