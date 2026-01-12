@@ -99,6 +99,13 @@ bossPos = {
   dx: 0,
   dy: 0
 };
+
+let enemy1Pos = {
+  dx: 800, // Starting X position
+  dy: 0,
+  direction: 1, // 1 for right, -1 for left
+  range: 200    // How far it walks before turning
+};
 let initialY;
 
 let bx = 0;
@@ -189,13 +196,13 @@ function preload() {
 
   
   for (let i = 1; i <= totalIdleFrames; i++) {
-    enemy1Frames.idleFrames.push(loadImage(`assets/Enemy1Anims/Enemy1Idle/Enemy_1_Idle_(${i}).png`));
+    enemy1Frames.idleFrames.push(loadImage(`assets/Enemy1Anims/Enemy1Idle/Enemy_1_Idle_ (${i}).png`));
   }
   for (let i = 1; i <= totalEnemy1AttackFrames; i++) {
-    enemy1Frames.attack1Frames.push(loadImage(`assets/Enemy1Anims/Enemy1Attack/Enemy_1_Attack_(${i}).png`));
+    enemy1Frames.attack1Frames.push(loadImage(`assets/Enemy1Anims/Enemy1Attack/Enemy_1_Attack_ (${i}).png`));
   }
   for (let i = 1; i <= totalEnemy1RunFrames; i++) {
-    enemy1Frames.walkFrames.push(loadImage(`assets/Enemy1Anims/Enemy1Move/Enemy_1_Move_(${i}).png`));
+    enemy1Frames.walkFrames.push(loadImage(`assets/Enemy1Anims/Enemy1Move/Enemy_1_Move_ (${i}).png`));
   }
 
 
@@ -388,7 +395,7 @@ function draw() {
       image(Frames.boss[frameIndex.boss], bossPos.dx, bossPos.dy, bossSizeX , bossSizeY);
     }
     if (Frames.enemy1.length > 0) {
-      image(Frames.enemy1[frameIndex.enemy1], bossPos.dx-50, bossPos.dy, bossSizeX , bossSizeY);
+      image(Frames.enemy1[frameIndex.enemy1], enemy1Pos.dx, enemy1Pos.dy, bossSizeX, bossSizeY);
     }
 
     // Update the frame index based on animation delay
@@ -572,8 +579,10 @@ function keyPressed() {
     bossPos.dy = initialY + 30;
     currentAnim.player = "idle";
     currentAnim.boss = "idle";
+    currentAnim.boss.enemy1 = "idle";
     frameIndex.player = 0;
     frameIndex.boss = 0;
+    frameIndex.enemy1 = 0;
     lastBossAttack = 0;
   }
 }
@@ -656,6 +665,22 @@ function movement() {
     }
   }
 
+  // Enemy 1 Patrol Logic
+  enemy1Pos.dx += enemy1Pos.speed * enemy1Pos.direction;
+
+  // If it hits a boundary, flip direction
+  if (enemy1Pos.dx >= enemy1Pos.rightBoundary || enemy1Pos.dx <= enemy1Pos.leftBoundary) {
+    enemy1Pos.direction *= -1;
+  }
+
+  // Ensure the animation is set to walk while moving
+  if (currentAnim.enemy1 !== "walk" && currentAnim.enemy1 !== "attack") {
+    setAnimation("enemy1", "walk");
+  }
+
+  // Keep Enemy 1 on the ground (same Y as boss)
+  enemy1Pos.dy = bossPos.dy;
+
   // Boss AI
   const attackRangeX = 20;
   const attackRangeY = 75;
@@ -689,6 +714,7 @@ function movement() {
 function updateBossAttack() {
   let distanceX = Math.abs(charPos.dx - bossPos.dx);
   let distanceY = Math.abs(charPos.dy - bossPos.dy);
+  
 
   if (distanceX <= 20 && distanceY <= 100 && millis() - lastBossAttack > bossAttackCooldown) {
     playerHealth -= 10;
