@@ -33,6 +33,11 @@ let endBG = false;
 let mapCount = 0;
 
 // Arrays to hold animation frames
+enemy1Frames = {
+  idleFrames : [],
+  walkFrames : [],
+  attackFrames : [],
+};
 playerFrames = {
   idleFrames : [],
   rollFrames : [],
@@ -69,30 +74,43 @@ let totalAttackFrames = 18;
 let totalBlockFrames = 6;
 let totalJumpFrames = 3;
 
+let totalEnemy1RunFrames = 10;
+let totalEnemy1AttackFrames = 20;
+
 // Animation control variables
 let frameIndex = {
   player: 0,
-  boss: 0
+  boss: 0,
+  enemy1: 0
 };
 let delayCounter = 0;
 let frameDelay = 7;
 let bg;
 
-
 // Base animation state
 let currentAnim ={
   player: "idle",
-  boss: "idle",  
+  boss: "idle",
+  enemy1: "idle",  
 };
 
 // Object Positions
 charPos = {
-  dx: 500,
+  dx: 0,
   dy: 0,
 };
 bossPos = {
   dx: 0,
   dy: 0
+};
+
+let enemy1Pos = {
+  dx: 20,           // Starting X position
+  dy: 0,
+  direction: 1,      // 1 for right, -1 for left
+  speed: 2,          // ADD THIS: How fast it walks
+  leftBoundary: 600, // ADD THIS: Left patrol limit
+  rightBoundary: 1000 // ADD THIS: Right patrol limit
 };
 let initialY;
 
@@ -126,7 +144,6 @@ function setAnimation(character, animName) {
   }
 }
 
-// Preload function to load images into the empty arrays, and load music
 function preload() {
   bgMusic = loadSound("assets/music/desertmusic.mp3");
 
@@ -180,6 +197,17 @@ function preload() {
   
   for (let i = 1; i <= totalIdleFrames; i++) {
     bossFrames.runbackFrames.push(loadImage(`assets/bossAnims/run_back_${i}.png`));
+  }
+
+  
+  for (let i = 1; i <= totalIdleFrames; i++) {
+    enemy1Frames.idleFrames.push(loadImage(`assets/Enemy1Anims/Enemy1Idle/Enemy_1_Idle_ (${i}).png`));
+  }
+  for (let i = 1; i <= totalEnemy1AttackFrames; i++) {
+    enemy1Frames.attackFrames.push(loadImage(`assets/Enemy1Anims/Enemy1Attack/Enemy_1_Attack_ (${i}).png`));
+  }
+  for (let i = 1; i <= totalEnemy1RunFrames; i++) {
+    enemy1Frames.walkFrames.push(loadImage(`assets/Enemy1Anims/Enemy1Move/Enemy_1_Move_ (${i}).png`));
   }
 
   bg1 = loadImage("assets/Free Pixel Art Forest/PNG/Background layers/Layer_1.png");
@@ -290,7 +318,7 @@ function draw() {
     image(bg2, bx + width , by, width, height);
     image(bg1, bx + width , by, width, height);
     
-    console.log(mapCount);
+    //console.log(mapCount);
 
     drawPlats();
     
@@ -316,10 +344,10 @@ function draw() {
     movement();
     updateBossAttack();
 
-    // Determine which frames to play depending on the current animation
     let Frames = {
       player: "idle",
-      boss: "idle"
+      boss: "idle",
+      enemy1: "idle"
     };
 
     // Frames for boss animations
@@ -334,6 +362,18 @@ function draw() {
     }
     else if (currentAnim.boss === "runback") {
       Frames.boss = bossFrames.runbackFrames;
+    }
+
+    // Frames for Enemy 1 animations
+
+    if (currentAnim.enemy1 === "idle") {
+      Frames.enemy1 = enemy1Frames.idleFrames;
+    }
+    else if (currentAnim.enemy1 === "attack") {
+      Frames.enemy1 = enemy1Frames.attackFrames;
+    }
+    else if (currentAnim.enemy1 === "walk") {
+      Frames.enemy1 = enemy1Frames.walkFrames;
     }
 
     // Frames for player animations
@@ -372,12 +412,16 @@ function draw() {
     if (Frames.boss.length > 0) {
       image(Frames.boss[frameIndex.boss], bossPos.dx, bossPos.dy, bossSizeX , bossSizeY);
     }
+    if (Frames.enemy1.length > 0) {
+      image(Frames.enemy1[frameIndex.enemy1], enemy1Pos.dx, enemy1Pos.dy, bossSizeX -130, bossSizeY - 130);
+    }
 
     // Update the frame index based on animation delay
     delayCounter++;
     if (delayCounter >= frameDelay) {
       frameIndex.player = (frameIndex.player + 1) % Frames.player.length;
       frameIndex.boss = (frameIndex.boss + 1) % Frames.boss.length;
+      frameIndex.enemy1 = (frameIndex.enemy1 + 1) % Frames.enemy1.length;
       delayCounter = 0;
     }
 
@@ -390,6 +434,10 @@ function draw() {
       currentAnim.boss = "idle";
       frameIndex.boss = 0;
     }
+    if (frameIndex.enemy1 === Frames.enemy1.length-1 && currentAnim.enemy1 !== "idle" && currentAnim.enemy1 !== "walk") {
+      currentAnim.enemy1 = "idle";
+      frameIndex.enemy1 = 0;
+    }
   }
   
   if (showGrid) {
@@ -399,27 +447,27 @@ function draw() {
 
 // Logs loaded animations and their frame counts
 function animLog() {
-  console.log("------Animations loaded------");
+  //console.log("------Animations loaded------");
 
-  console.log("Player Frames: ");
+  //console.log("Player Frames: ");
   Object.keys(playerFrames).forEach((animName) => {
     if (Array.isArray(playerFrames[animName])) {
       let frameCount = playerFrames[animName].length;
-      console.log(animName + ": " + frameCount + " frames");
+      //console.log(animName + ": " + frameCount + " frames");
     }
     else {
-      console.log(animName + ": Not an array");
+      //console.log(animName + ": Not an array");
     }
   });
 
-  console.log("Boss Frames: ");
+  //console.log("Boss Frames: ");
   Object.keys(bossFrames).forEach((animName) => {
     if (Array.isArray(bossFrames[animName])) {
       let frameCount = bossFrames[animName].length;
-      console.log(animName + ": " + frameCount + " frames");
+      //console.log(animName + ": " + frameCount + " frames");
     }
     else {
-      console.log(animName + ": Not an array");
+      //console.log(animName + ": Not an array");
     }
   });
 }
@@ -473,7 +521,7 @@ function drawGrid() {
 function drawPlats() {
   for (let plat of platforms) {
     image(platformImg, plat.x + bx, plat.y, plat.width, plat.height);
-    console.log(plat.x);
+    //console.log(plat.x);
   }
   if(bx < 0 - width){
     plat.x += moveSpeed;
@@ -640,6 +688,22 @@ function movement() {
       yVelocity = 0;
     }
   }
+
+  // Enemy 1 Patrol Logic
+  enemy1Pos.dx += enemy1Pos.speed * enemy1Pos.direction;
+
+  // If it hits a boundary, flip direction
+  if (enemy1Pos.dx >= enemy1Pos.rightBoundary || enemy1Pos.dx <= enemy1Pos.leftBoundary) {
+    enemy1Pos.direction *= -1;
+  }
+
+  // Ensure the animation is set to walk while moving
+  if (currentAnim.enemy1 !== "walk" && currentAnim.enemy1 !== "attack") {
+    setAnimation("enemy1", "idle");
+  }
+
+  // Keep Enemy 1 on the ground (same Y as boss)
+  enemy1Pos.dy = bossPos.dy + 70;
 
   // Boss AI
   const attackRangeX = 20;

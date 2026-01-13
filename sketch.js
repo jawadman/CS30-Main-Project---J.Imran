@@ -71,7 +71,7 @@ let totalBlockFrames = 6;
 let totalJumpFrames = 3;
 
 let totalEnemy1RunFrames = 10;
-let totalEnemy1AttackFrames = 20
+let totalEnemy1AttackFrames = 20;
 
 // Animation control variables
 let frameIndex = {
@@ -416,7 +416,7 @@ function draw() {
       currentAnim.boss = "idle";
       frameIndex.boss = 0;
     }
-    if (frameIndex.boss === Frames.enemy1.length-1 && currentAnim.enemy1 !== "idle" && currentAnim.enemy1 !== "walk") {
+    if (frameIndex.enemy1 === Frames.enemy1.length-1 && currentAnim.enemy1 !== "idle" && currentAnim.enemy1 !== "walk") {
       currentAnim.enemy1 = "idle";
       frameIndex.enemy1 = 0;
     }
@@ -429,27 +429,27 @@ function draw() {
 
 // Logs loaded animations and their frame counts
 function animLog() {
-  console.log("------Animations loaded------");
+  //console.log("------Animations loaded------");
 
-  console.log("Player Frames: ");
+  //console.log("Player Frames: ");
   Object.keys(playerFrames).forEach((animName) => {
     if (Array.isArray(playerFrames[animName])) {
       let frameCount = playerFrames[animName].length;
-      console.log(animName + ": " + frameCount + " frames");
+      //console.log(animName + ": " + frameCount + " frames");
     }
     else {
-      console.log(animName + ": Not an array");
+      //console.log(animName + ": Not an array");
     }
   });
 
-  console.log("Boss Frames: ");
+  //console.log("Boss Frames: ");
   Object.keys(bossFrames).forEach((animName) => {
     if (Array.isArray(bossFrames[animName])) {
       let frameCount = bossFrames[animName].length;
-      console.log(animName + ": " + frameCount + " frames");
+      //console.log(animName + ": " + frameCount + " frames");
     }
     else {
-      console.log(animName + ": Not an array");
+      //console.log(animName + ": Not an array");
     }
   });
 }
