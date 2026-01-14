@@ -109,7 +109,7 @@ let enemy1Pos = {
 let initialY;
 
 let bx = 0;
-let by = -100;
+let by = 0;
 
 // Jumping variables
 let isJumping = false;
@@ -224,7 +224,7 @@ function preload() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  initialY = height / 2 + 60;
+  initialY = height - 200
   
   charPos.dx = 3 * cellSize; // Grid position (3,0)
   charPos.dy = initialY;
