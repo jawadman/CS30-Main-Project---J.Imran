@@ -853,11 +853,11 @@ function movement() {
         }
       }
       else if (distanceBoss > 0) {
-        bossPos.dx += 2; 
+        bossPos.dx += 6; 
         setAnimation("boss", "run");
       } 
       else if (distanceBoss < 0) {
-        bossPos.dx -= 2; 
+        bossPos.dx -= 6; 
         setAnimation("boss", "runback");
       }
       else {
