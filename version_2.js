@@ -249,7 +249,7 @@ function setup() {
   jumpForce = -(cellSize * 0.4); 
   moveSpeed = cellSize * 0.08; 
   
-  charPos.dx = 3 * cellSize; 
+  charPos.dx = 12 * cellSize; 
   charPos.dy = initialY - playerSizeY; 
   
   // Hide Boss Initially
@@ -532,7 +532,7 @@ function animLog() {
 function generateNewChunk() {
   
   if (chunksGenerated >= MAX_CHUNKS) {
-      return; 
+    return; 
   }
 
   while (nextSpawnX < Math.abs(bx) + width + 500) {
@@ -717,7 +717,7 @@ function keyPressed() {
     playerHealth = 100;
     bossHealth = 100;
     
-    charPos.dx = 3 * cellSize;
+    charPos.dx = 12 * cellSize;
     charPos.dy = initialY - playerSizeY;
     
     bossPos.dx = -99999;
