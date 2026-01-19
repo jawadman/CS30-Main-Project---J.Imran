@@ -179,18 +179,18 @@ function setAnimation(character, animName) {
 
 // Preload function to load images into the empty arrays, and load music
 function preload() {
-  menuMusic       = loadSound("assets/SFX&Music/Menu Music.mp3");
-  level1Music     = loadSound("assets/SFX&Music/Level1Bg.mp3");
-  level2Music     = loadSound("assets/SFX&Music/Level2Bg.mp3");
-  level3Music     = loadSound("assets/SFX&Music/Level3Bg.mp3");
+  menuMusic = loadSound("assets/SFX&Music/Menu Music.mp3");
+  level1Music = loadSound("assets/SFX&Music/Level1Bg.mp3");
+  level2Music = loadSound("assets/SFX&Music/Level2Bg.mp3");
+  level3Music = loadSound("assets/SFX&Music/Level3Bg.mp3");
 
-  jumpSFX         = loadSound("assets/SFX&Music/Jump_SFX.mp3");
-  playerAtkSFX    = loadSound("assets/SFX&Music/PlayerATK_SFX.mp3");
-  playerHurtSFX   = loadSound("assets/SFX&Music/PlayerHurt_SFX.mp3");
-  enemyHurtSFX    = loadSound("assets/SFX&Music/Enemy1hurt.mp3");
-  bossAtkSFX      = loadSound("assets/SFX&Music/Boss1ATK_SFX.mp3");
-  menuSpaceSFX    = loadSound("assets/SFX&Music/MenuSpace_SFX.mp3");
-  fallSFX         = loadSound("assets/SFX&Music/FallSFX.mp3");
+  jumpSFX = loadSound("assets/SFX&Music/Jump_SFX.mp3");
+  playerAtkSFX = loadSound("assets/SFX&Music/PlayerATK_SFX.mp3");
+  playerHurtSFX = loadSound("assets/SFX&Music/PlayerHurt_SFX.mp3");
+  enemyHurtSFX = loadSound("assets/SFX&Music/Enemy1hurt.mp3");
+  bossAtkSFX = loadSound("assets/SFX&Music/Boss1ATK_SFX.mp3");
+  menuSpaceSFX = loadSound("assets/SFX&Music/MenuSpace_SFX.mp3");
+  fallSFX = loadSound("assets/SFX&Music/FallSFX.mp3");
 
   bg1 = loadImage("assets/Free Pixel Art Forest/PNG/Background layers/Layer_1.png");
   bg2 = loadImage("assets/Free Pixel Art Forest/PNG/Background layers/Layer_2.png");
