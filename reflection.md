@@ -1,0 +1,13 @@
+# Reflection
+
+## What advice would you give to yourself if you were to start a project like this again?
+Definitely actually properly planning out what I actually wanted out of the game towards the start of the semester. The main issue for me was getting the parallax side-scrolling to work, which took me an egregious amount of time. Organizing my code, i.e. actually familiarizing myself better with OOP/Classes would have made my project a lot easier to work with. I also regret not taking the time to go more in-depth or learn  matter-js, as from what I saw in class, a lot of its functions would have benefitted me.
+
+## Did you complete everything in your “needs to have” list?
+I did techniacally complete everything in my needs to have, but I was honestly greatly unsatisfied with how my project ultimately ended, as towards the last few weeks, I got into a huge rut over several aspects of the game, leading to the final product feeling more more like a proof of concept, than what I was hoping the actual game to be.
+
+## What was the hardest part of the project?
+Towards the start, there were many aspects of my project that I struggled with. Chief among these issues were ones related to generation in general. I had to watch a bunch of tutorials, trying to figure out how I could randomly generate enemies, and platforms. The platforms also of course required me to understand collision logic. The debugging, and re-writing of how chunk-generation would work alongside enemy spawning, and the general logic behind it all, took up the greatest amount of time for me in this project. Creating the patrolling enemy AI was also a bit of a challenge.
+
+## Were there any problems you could not solve?
+A few problems, including the design of the boss AIs. I came up blank when trying to design the AIs, so I had to end up just re-using the initial boss's AI for all 3 bosses. I wanted to add the difficulty selector, as adding it wouldn't have been too difficult, but I genuinely ran out of time. Another main issue I faced was my character's Y positions being all messed up, if switched between different aspect ratios of displays, and I never trully ended up fixing it. The issue for me was not being able to solve a problem, but in fact trying to figure out what problems I truly need to prioritise solving till the deadline. So I would say time-management was the true problem for me in this project.
