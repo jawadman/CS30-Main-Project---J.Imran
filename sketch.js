@@ -3,6 +3,17 @@
 // Jawad Imran
 // 12/11/25
 
+// GOAL: use code from previous assignments to create platforms using 2D arrays.
+// The player can move, jump, attack, block, and roll. The enemy chases the player and attacks when close enough.
+// The game ends when either the player or the enemy runs out of health.
+// Controls: A and D to move left and right, W to jump, S to block, click to attack, space to roll
+
+// For my extra for experts, I added an animation log that outputs the names and frame counts of all loaded animations to the console when the game starts. I used the
+// Objects.keys() method to iterate through the animation frame arrays stored in objects for both the player and the boss
+// also utilizing the forEach() method to loop through each animation name and log the frame count.
+
+// In terms of the basic requirements, for the assignment, I have used 2D arrays to create platforms in the world.
+
 // Global Variables
 let platforms = [];
 let platformW; 
@@ -31,9 +42,9 @@ const TOTAL_LEVELS = 3;
 // Story Messages
 let storyMessages = [
   "THE FOREST\n\nKemal, the Assassin of the East infiltrates the duchy of the Luthania.\nHis mission is to rescue his brother who was take prisoner.\n\n(Press Space to Begin)", 
-    
+    
   "CASTLE LUTHANIA\n\nAfter defeating the dark guardian dark wizard of the deep forests, Kemal sneaks into the Castle.\n\n(Press Space to Continue)", 
-    
+    
   "HIDDEN DUNGEONS\n\nDefeating the unholy knight, Kemal ventures into the hidden dungeons.\nWhat awaits him in the morbid abyss, only fate knows.\n\n(Press Space to Continue)"
 ];
 let currentStoryIndex = 0; 
@@ -66,9 +77,17 @@ bossFrames = {
   runbackFrames : []
 };
 
+boss2Frames = {
+  idleFrames : [],
+  attack1Frames : [],
+  runFrames : [],
+  runbackFrames : []
+};
+
 let bossSizeX;
 let bossSizeY;
 
+// Total frames for each animation
 let totalRunFrames = 8;
 let totalRunBackFrames = 8;
 let totalIdleFrames = 8;
@@ -80,6 +99,11 @@ let totalJumpFrames = 3;
 let totalEnemy1RunFrames = 10;
 let totalEnemy1AttackFrames = 20;
 
+let totalBoss2Idle = 4;
+let totalBoss2Walk = 8;
+let totalBoss2Atk = 7;
+
+// Animation control variables
 let frameIndex = {
   player: 0,
   boss: 0,
@@ -89,12 +113,14 @@ let delayCounter = 0;
 let frameDelay = 7;
 let bg;
 
+// Base animation state
 let currentAnim ={
   player: "idle",
   boss: "idle",
-  enemy1: "idle",  
+  enemy1: "idle",  
 };
 
+// Object Positions
 charPos = {
   dx: 0,
   dy: 0,
@@ -104,9 +130,12 @@ bossPos = {
   dy: 0
 };
 
+// Enemy array
 let enemies = []; 
+// Chunk generation variables
 let nextSpawnX = 0;
 
+// Boss Arena control
 let chunksGenerated = 0;
 const MAX_CHUNKS = 10; 
 let bossArenaStartX = 0; 
@@ -117,12 +146,14 @@ let initialY;
 let bx = 0;
 let by = 0;
 
+// Jumping variables
 let isJumping = false;
 let yVelocity = 0;
-let gravity;   
+let gravity;   
 let jumpForce; 
 let moveSpeed; 
 
+// Game state variable
 let game = "start";
 
 let timer = 0;
@@ -138,6 +169,7 @@ let lastBossAttack = 0;
 let menuMusic, level1Music, level2Music, level3Music;
 let jumpSFX, playerAtkSFX, playerHurtSFX, enemyHurtSFX, bossAtkSFX, menuSpaceSFX, fallSFX;
 
+// Function to change animation state
 function setAnimation(character, animName) {
   if (currentAnim[character] !== animName) {
     currentAnim[character] = animName;
@@ -145,22 +177,21 @@ function setAnimation(character, animName) {
   }
 }
 
+// Preload function to load images into the empty arrays, and load music
 function preload() {
-  // Load music/SFX
-  menuMusic     = loadSound("assets/SFX&Music/Menu Music.mp3");
-  level1Music   = loadSound("assets/SFX&Music/Level1Bg.mp3");
-  level2Music   = loadSound("assets/SFX&Music/Level2Bg.mp3");
-  level3Music   = loadSound("assets/SFX&Music/Level3Bg.mp3");
+  menuMusic       = loadSound("assets/SFX&Music/Menu Music.mp3");
+  level1Music     = loadSound("assets/SFX&Music/Level1Bg.mp3");
+  level2Music     = loadSound("assets/SFX&Music/Level2Bg.mp3");
+  level3Music     = loadSound("assets/SFX&Music/Level3Bg.mp3");
 
-  jumpSFX       = loadSound("assets/SFX&Music/Jump_SFX.mp3");
-  playerAtkSFX  = loadSound("assets/SFX&Music/PlayerATK_SFX.mp3");
-  playerHurtSFX = loadSound("assets/SFX&Music/PlayerHurt_SFX.mp3");
-  enemyHurtSFX  = loadSound("assets/SFX&Music/Enemy1hurt.mp3");
-  bossAtkSFX    = loadSound("assets/SFX&Music/Boss1ATK_SFX.mp3");
-  menuSpaceSFX  = loadSound("assets/SFX&Music/MenuSpace_SFX.mp3");
-  fallSFX       = loadSound("assets/SFX&Music/FallSFX.mp3");
+  jumpSFX         = loadSound("assets/SFX&Music/Jump_SFX.mp3");
+  playerAtkSFX    = loadSound("assets/SFX&Music/PlayerATK_SFX.mp3");
+  playerHurtSFX   = loadSound("assets/SFX&Music/PlayerHurt_SFX.mp3");
+  enemyHurtSFX    = loadSound("assets/SFX&Music/Enemy1hurt.mp3");
+  bossAtkSFX      = loadSound("assets/SFX&Music/Boss1ATK_SFX.mp3");
+  menuSpaceSFX    = loadSound("assets/SFX&Music/MenuSpace_SFX.mp3");
+  fallSFX         = loadSound("assets/SFX&Music/FallSFX.mp3");
 
-  // Load background images
   bg1 = loadImage("assets/Free Pixel Art Forest/PNG/Background layers/Layer_1.png");
   bg2 = loadImage("assets/Free Pixel Art Forest/PNG/Background layers/Layer_2.png");
   bg3 = loadImage("assets/Free Pixel Art Forest/PNG/Background layers/Layer_3.png");
@@ -173,13 +204,12 @@ function preload() {
   bg10 = loadImage("assets/Free Pixel Art Forest/PNG/Background layers/Layer_10.png");
   bg11 = loadImage("assets/Free Pixel Art Forest/PNG/Background layers/Layer_11.png");
   bg12 = loadImage("assets/Free Pixel Art Forest/PNG/Background layers/Layer_12.png");
-  
+  
   bgLevel2 = loadImage("assets/level_2.png"); 
   bgLevel3 = loadImage("assets/level_3.png"); 
 
   platformImg = loadImage("assets/platform.png");
 
-  // Load character animation frames
   for (let i = 1; i <= totalIdleFrames; i++) {
     playerFrames.idleFrames.push(loadImage(`assets/playerAnims/idle_${i}.png`));
   }
@@ -207,7 +237,7 @@ function preload() {
   for (let i = 1; i <= totalJumpFrames; i++) {
     playerFrames.jumpDownFrames.push(loadImage(`assets/playerAnims/j_down_${i}.png`));
   }
-  
+  
   for (let i = 1; i <= totalIdleFrames; i++) {
     bossFrames.idleFrames.push(loadImage(`assets/bossAnims/boss_idle_${i}.png`));
   }
@@ -221,6 +251,16 @@ function preload() {
     bossFrames.runbackFrames.push(loadImage(`assets/bossAnims/run_back_${i}.png`));
   }
 
+  for (let i = 1; i <= totalBoss2Idle; i++) {
+    boss2Frames.idleFrames.push(loadImage(`assets/boss2Anims/boss2_idle_ (${i}).png`));
+  }
+  for (let i = 1; i <= totalBoss2Walk; i++) {
+    boss2Frames.runFrames.push(loadImage(`assets/boss2Anims/boss2_walk_  (${i}).png`));
+  }
+  for (let i = 1; i <= totalBoss2Atk; i++) {
+    boss2Frames.attack1Frames.push(loadImage(`assets/boss2Anims/boss2_atk_ (${i}).png`));
+  }
+
   for (let i = 1; i <= totalIdleFrames; i++) {
     enemy1Frames.idleFrames.push(loadImage(`assets/Enemy1Anims/Enemy1Idle/Enemy_1_Idle_ (${i}).png`));
   }
@@ -231,17 +271,17 @@ function preload() {
     enemy1Frames.walkFrames.push(loadImage(`assets/Enemy1Anims/Enemy1Move/Enemy_1_Move_ (${i}).png`));
   }
 }
-// Setup
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  
+  
   cellSize = height / GRID_ROWS;
   platformW = cellSize * 2;
   platformH = cellSize * 0.2;
-  
+  
   playerSizeX = cellSize * 2.5; 
   playerSizeY = cellSize * 3.5; 
-  
+  
   bossSizeX = cellSize * 5.5; 
   bossSizeY = cellSize * 4.5;
 
@@ -250,7 +290,7 @@ function setup() {
   gravity = cellSize * 0.02;
   jumpForce = -(cellSize * 0.4); 
   moveSpeed = cellSize * 0.08; 
-  
+  
   currentLevel = 1;
   resetLevel();
 }
@@ -280,7 +320,7 @@ function manageMusic() {
       track.stop();
     }
   }
-    
+    
   if (targetMusic && !targetMusic.isPlaying()) {
     targetMusic.setVolume(0.5);
     targetMusic.loop();
@@ -288,9 +328,9 @@ function manageMusic() {
 }
 
 function draw() {
-  // Manage Music every frame
   manageMusic();
 
+  // Start Screen
   if (game === "start") {
     timer = millis();
     background("black");
@@ -306,26 +346,26 @@ function draw() {
     text("A Terrible Simulator For An Assassin", width / 2, height / 2 - 80);
     textSize(20);
     text("Press Any Key To Start", width / 2, height / 2 - 10);
-    
+    
     fill("white");
     textSize(30);
     text("W to Jump, A to Move Left, D to Move Right", width / 2, height / 2 + 80); 
     text("Click to Attack, S to Block, Space to Roll", width / 2, height / 2 + 120);
   }
-  
+  
   else if (game === "story") {
     background("black");
     fill("white");
     textAlign(CENTER, CENTER);
     textSize(32);
-      
+      
     if (currentStoryIndex < storyMessages.length) {
       text(storyMessages[currentStoryIndex], width/2, height/2);
     }
   }
-  
+  
+  // Main Game
   else {
-    // Game Over / Win Logic
     if (playerHealth <= 0) {
       game = "gameOver";
     }
@@ -339,7 +379,7 @@ function draw() {
         game = "gameOver"; 
       }
     }
-    
+    
     if (game === "gameOver") {
       background("black");
       fill("red");
@@ -361,14 +401,14 @@ function draw() {
       return; 
     }
 
-    // Background Scrolling
+    // Background and Platforms
     let bgX = bx % width;
-    
+    
     if (currentLevel === 1) {
       let backgrounds = [bg12, bg11, bg10, bg9, bg8, bg7, bg6, bg5, bg4, bg3, bg2, bg1];
       for (let img of backgrounds) {
         image(img, bgX - width, by, width, height); 
-        image(img, bgX, by, width, height);         
+        image(img, bgX, by, width, height);         
         image(img, bgX + width, by, width, height); 
       }
     }
@@ -380,25 +420,32 @@ function draw() {
       else {
         currentBgImg = bgLevel3;
       }
-      image(currentBgImg, bgX - width, by, width, height); 
-      image(currentBgImg, bgX, by, width, height);         
-      image(currentBgImg, bgX + width, by, width, height); 
+      
+      let scaleFactor = height / currentBgImg.height; 
+      let bgW = currentBgImg.width * scaleFactor;
+      let scrollX = bx % bgW;
+      let tilesNeeded = ceil(width / bgW) + 1;
+      
+      for (let i = -1; i < tilesNeeded; i++) {
+        image(currentBgImg, scrollX + i * bgW, by, bgW, height);
+      }
     }
-    
+    
     drawPlats();
-    
+    
     timerPassed = int((millis()-timer) / 1000);
     fill("black");
     textSize(20);
     text("Time Wasted On these Plains: " + timerPassed , 200, 30);
 
-    // Health Bars
+    // Player Health Bar
     fill("green");
     rect(50, 50, playerHealth / maxHealth * 200, 20);
     stroke(0);
     noFill();
     rect(50, 50, 200, 20);
 
+    // Boss Health Bar
     if (chunksGenerated >= MAX_CHUNKS) {
       fill("red");
       textSize(20);
@@ -418,20 +465,23 @@ function draw() {
       enemy1: "idle"
     };
 
-    // Set current frames based on animation state
+    let activeBossFrames = currentLevel === 2 ? boss2Frames : bossFrames;
+
+    // Frames for boss animations
     if (currentAnim.boss === "idle") {
-      Frames.boss = bossFrames.idleFrames;
+      Frames.boss = activeBossFrames.idleFrames;
     }
     else if (currentAnim.boss === "attack") {
-      Frames.boss = bossFrames.attack1Frames;
+      Frames.boss = activeBossFrames.attack1Frames;
     }
     else if (currentAnim.boss === "run") {
-      Frames.boss = bossFrames.runFrames;
+      Frames.boss = activeBossFrames.runFrames;
     }
     else if (currentAnim.boss === "runback") {
-      Frames.boss = bossFrames.runbackFrames;
+      Frames.boss = activeBossFrames.runbackFrames;
     }
 
+    // Frames for player animations
     if (currentAnim.player === "idle") {
       Frames.player = playerFrames.idleFrames;
     } 
@@ -460,23 +510,23 @@ function draw() {
       Frames.player = playerFrames.jumpDownFrames;
     }
 
+    // Draws the current frame
     if (Frames.player.length > 0) {
       image(Frames.player[frameIndex.player], charPos.dx, charPos.dy, playerSizeX, playerSizeY);
     }
-    
+    
     if (chunksGenerated >= MAX_CHUNKS) {
       if (Frames.boss.length > 0) {
-        image(Frames.boss[frameIndex.boss], bossPos.dx + bx, bossPos.dy, bossSizeX , bossSizeY);
+        image(Frames.boss[frameIndex.boss % Frames.boss.length], bossPos.dx + bx, bossPos.dy, bossSizeX , bossSizeY);
       }
     }
-    
-    // Enemy Update Loop
+    
     let playerCenterX = charPos.dx + playerSizeX / 2;
     let playerCenterY = charPos.dy + playerSizeY / 2;
-    
+    
     for (let i = enemies.length - 1; i >= 0; i--) {
       let e = enemies[i];
-        
+        
       if (e.health <= 0) {
         enemies.splice(i, 1);
         continue; 
@@ -490,14 +540,14 @@ function draw() {
 
       let distX = Math.abs(playerCenterX - enemyCenterX);
       let distY = Math.abs(playerCenterY - enemyCenterY);
-        
+        
       if (distX < 120 && distY < 150) {
         e.state = "attack";
         if (playerCenterX < enemyCenterX) {
           e.direction = -1; 
         }
         else {
-          e.direction = 1;  
+          e.direction = 1;  
         }
         if (millis() - e.lastAttackTime > e.attackCooldown) {
           if (currentAnim.player !== "block") {
@@ -545,29 +595,38 @@ function draw() {
       }
     }
 
+    // Update the frame index based on animation delay
     delayCounter++;
     if (delayCounter >= frameDelay) {
       frameIndex.player = (frameIndex.player + 1) % Frames.player.length;
-      frameIndex.boss = (frameIndex.boss + 1) % Frames.boss.length;
+      
+      if (Frames.boss.length > 0) {
+        frameIndex.boss = (frameIndex.boss + 1) % Frames.boss.length;
+      }
+      
       frameIndex.enemy1 = (frameIndex.enemy1 + 1) % 1000; 
       delayCounter = 0;
     }
 
+    // Reset to idle after animations that dont loop finish
     if (frameIndex.player === Frames.player.length-1 && currentAnim.player !== "idle" && currentAnim.player !== "run" && currentAnim.player !== "runback") {
       currentAnim.player = "idle";
       frameIndex.player = 0;
     }
-    if (frameIndex.boss === Frames.boss.length-1 && currentAnim.boss !== "idle" && currentAnim.boss !== "run" && currentAnim.boss !== "runback") {
-      currentAnim.boss = "idle";
-      frameIndex.boss = 0;
+    if (Frames.boss.length > 0) {
+      if (frameIndex.boss === Frames.boss.length-1 && currentAnim.boss !== "idle" && currentAnim.boss !== "run" && currentAnim.boss !== "runback") {
+        currentAnim.boss = "idle";
+        frameIndex.boss = 0;
+      }
     }
   }
-  
+  
   if (showGrid) {
     drawGrid();
   }
 }
-// Animation Log for Debugging
+
+// Logs loaded animations and their frame counts
 function animLog() {
   Object.keys(playerFrames).forEach((animName) => {
     if (Array.isArray(playerFrames[animName])) {
@@ -580,7 +639,8 @@ function animLog() {
     }
   });
 }
-// Chunk Generation
+
+// Platform Generation
 function generateNewChunk() {
   if (chunksGenerated >= MAX_CHUNKS) {
     return; 
@@ -588,7 +648,7 @@ function generateNewChunk() {
 
   while (nextSpawnX < Math.abs(bx) + width + 500) {
     chunksGenerated++;
-    
+    
     if (chunksGenerated === MAX_CHUNKS) {
       let arenaWidth = width * 4; 
       bossArenaStartX = nextSpawnX;
@@ -596,11 +656,11 @@ function generateNewChunk() {
       nextSpawnX += arenaWidth + 2000; 
       return;
     }
-    
+    
     let isGround = random() < 0.4; 
     let platWidthCols = floor(random(2, 6)); 
     let currentPlatW = platWidthCols * cellSize;
-    
+    
     if (!isGround) {
       let gridY = floor(random(9, 13)); 
       let platY = gridY * cellSize;
@@ -611,7 +671,7 @@ function generateNewChunk() {
         width: currentPlatW,
         height: platformH,
       });
-        
+        
       if (random() < 0.4) {
         spawnEnemy(nextSpawnX, platY, currentPlatW, true);
       }
@@ -626,7 +686,7 @@ function generateNewChunk() {
     nextSpawnX += currentPlatW + gap;
   }
 }
-// Spawn enemy function
+
 function spawnEnemy(x, y, w, isFloating) {
   enemies.push({
     dx: x + w / 2 - 50, 
@@ -643,7 +703,8 @@ function spawnEnemy(x, y, w, isFloating) {
     attackCooldown: 1000 
   });
 }
-// draw platforms
+
+// Draws platform asset based on 2D array
 function drawPlats() {
   for (let plat of platforms) {
     let platScreenX = plat.x + bx;
@@ -652,6 +713,7 @@ function drawPlats() {
     }
   }
 }
+
 // Check for platform collisions
 function checkPlatCollision() {
   let playerBottom = charPos.dy + playerSizeY;
@@ -664,23 +726,23 @@ function checkPlatCollision() {
     let platScreenX = plat.x + bx;
 
     if (playerBottom === plat.y && 
-        playerRight > platScreenX && 
-        playerLeft < platScreenX + plat.width) {
+        playerRight > platScreenX && 
+        playerLeft < platScreenX + plat.width) {
       onPlatform = true;
       break;
     }
-    
+    
     if (playerBottom <= plat.y && 
-        playerBottom + yVelocity >= plat.y &&
-        playerRight > platScreenX && 
-        playerLeft < platScreenX + plat.width) {
+        playerBottom + yVelocity >= plat.y &&
+        playerRight > platScreenX && 
+        playerLeft < platScreenX + plat.width) {
 
       charPos.dy = plat.y - playerSizeY;
       isJumping = false;
       yVelocity = 0;
       currentAnim.player = "idle";
       onPlatform = true;
-      
+      
       if (yVelocity > 0) {
         fallSFX.play();
       }
@@ -691,6 +753,7 @@ function checkPlatCollision() {
   return onPlatform;
 }
 
+// Right click to attack
 function mouseClicked() {
   if (mouseX < charPos.dx + 100) { 
     setAnimation("player", "attackback");
@@ -698,13 +761,12 @@ function mouseClicked() {
   else {
     setAnimation("player", "attack");
   }
-  
+  
   playerAtkSFX.play();
 
-  // Damage Boss
   let bossScreenX = bossPos.dx + bx;
   let distanceX = Math.abs(charPos.dx - bossScreenX);
-  
+  
   if (distanceX <= 150) { 
     bossHealth -= 10;
     enemyHurtSFX.play();
@@ -713,7 +775,6 @@ function mouseClicked() {
     }
   }
 
-  // Damage Enemies
   let playerCenterX = charPos.dx + playerSizeX / 2;
   let playerCenterY = charPos.dy + playerSizeY / 2;
 
@@ -736,7 +797,6 @@ function mouseClicked() {
 }
 
 function keyTyped() {
-  // Story Mode Input
   if (game === "story" && key === ' ') {
     if (currentStoryIndex > 0) {
       resetLevel();
@@ -744,16 +804,14 @@ function keyTyped() {
     menuSpaceSFX.play();
     game = "play";
   }
-  
-  // Start Screen Input
+  
   else if (game === "start") {
     game = "story";
     currentStoryIndex = 0;
     menuSpaceSFX.play();
     animLog();
   }
-  
-  // Game Input
+  
   else if (game !== "gameOver" && game !== "story") {
     if (key === " ") {
       setAnimation("player", "roll");
@@ -772,6 +830,7 @@ function keyTyped() {
   }
 }
 
+// R key to restart after game ends
 function keyPressed() {
   if (game === "gameOver" && (key === 'r' || key === 'R')) {
     game = "start";
@@ -779,38 +838,39 @@ function keyPressed() {
     resetLevel();
   }
 }
-// Reset Level
+
 function resetLevel() {
   playerHealth = 100;
   bossHealth = 100;
-    
+    
   charPos.dx = 3 * cellSize;
   charPos.dy = initialY - playerSizeY;
-    
+    
   bossPos.dx = -99999;
   bossPos.dy = initialY - bossSizeY + 60;
-    
+    
   currentAnim.player = "idle";
   currentAnim.boss = "idle";
   frameIndex.player = 0;
   frameIndex.boss = 0;
   lastBossAttack = 0;
-    
+    
   bx = 0;
   enemies = [];
   platforms = []; 
   chunksGenerated = 0;
   arenaLocked = false;
-    
+    
   nextSpawnX = width;
   generateNewChunk();
 }
-// Movement Function
+
+// Moevement functions 
 function movement() {
-  
+  
   if (keyIsDown(68)) { 
     let canMoveRight = true;
-    
+    
     if (chunksGenerated >= MAX_CHUNKS) {
       let arenaLimit = bossArenaStartX + width * 3.8; 
       if (Math.abs(bx) > arenaLimit) {
@@ -862,13 +922,14 @@ function movement() {
       currentAnim.player = "idle";
     }
   }
-// Jumping and Falling Mechanics
+
+  // Jumping Mechanic
   if (isJumping) {
     charPos.dy += yVelocity;
     yVelocity += gravity;
 
     let landed = checkPlatCollision();
-    
+    
     if (!landed && charPos.dy + playerSizeY >= initialY) {
       charPos.dy = initialY - playerSizeY;
       isJumping = false;
@@ -896,16 +957,16 @@ function movement() {
     }
   }
 
-  // Boss movement AI
+  // Boss AI
   if (chunksGenerated >= MAX_CHUNKS) {
     const attackRangeX = 20;
     const attackRangeY = 75;
-      
+      
     let bossScreenX = bossPos.dx + bx; 
     let distanceBoss = charPos.dx - bossScreenX;
     let absoluteDistanceY = Math.abs(charPos.dy - bossPos.dy);
     let absoluteDistanceX = Math.abs(distanceBoss);
-    
+    
     if (bossScreenX > -200 && bossScreenX < width + 200) {
       if (absoluteDistanceX <= attackRangeX && absoluteDistanceY <= attackRangeY) {
         if (currentAnim.boss !== "idle" && currentAnim.boss !== "attack") {
@@ -928,7 +989,7 @@ function movement() {
     }
   }
 }
-// Boss Attack Logic
+
 function updateBossAttack() {
   if (chunksGenerated < MAX_CHUNKS) {
     return;
@@ -949,6 +1010,7 @@ function updateBossAttack() {
   }
 }
 
+// Draws a grid outline
 function drawGrid() {
   noFill();
   stroke("blue");
